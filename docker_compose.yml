@@ -18,17 +18,15 @@ services:
 
   playit:
     container_name: playit_agent
-    image: playit/agent
+    image: ghcr.io/playit-cloud/playit-agent:0.16
     restart: unless-stopped
+    environment:
+      - SECRET_KEY=${PLAYIT_GG_SECRET_KEY}
     depends_on:
       - crafty
     volumes:
-      - ./playit_data:/config  # Salva a identidade do agente
-    network_mode: "host" # Recomendado para Playit detectar portas locais facilmente
-    # Se preferir não usar host mode, comente a linha acima, descomente 'networks' abaixo
-    # e configure o túnel no site da Playit para apontar para 'localhost:25565'
-    # networks:
-    #   - minecraft_net
+      - ./playit_data:/config
+    network_mode: host
 
 networks:
   minecraft_net:
