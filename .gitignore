@@ -4,7 +4,8 @@
 *.session-journal
 
 # Dados do Docker e Banco
-postgres_data/
+crafty_data/
+playit_data/
 data/
 config/
 __pycache__/

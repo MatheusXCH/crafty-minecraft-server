@@ -1,18 +1,21 @@
 services:
   crafty:
     container_name: crafty_controller
-    image: arcadiatechnology/crafty-4:latest
+    image: registry.gitlab.com/crafty-controller/crafty-4:latest
     restart: unless-stopped
-    ports:
-      - "8443:8443"   # Painel HTTPS
-      - "8123:8123"   # Dynmap/Bluemap (se usar)
-      - "25565:25565" # Porta padrão do Minecraft (necessária para LAN e Playit)
     environment:
-      - TZ=America/Sao_Paulo
+        - TZ=America/Sao_Paulo
+    ports:
+        - "8443:8443" # HTTPS
+        - "8123:8123" # DYNMAP
+        - "19132:19132/udp" # BEDROCK
+        - "25500-25600:25500-25600" # MC SERV PORT RANGE
     volumes:
-      - ./crafty_data:/crafty/app/config
-      - ./backups:/crafty/backups
-      - ./servers:/crafty/servers  # Onde ficam os arquivos do servidor
+        - ./crafty_data/backups:/crafty/backups
+        - ./crafty_data/logs:/crafty/logs
+        - ./crafty_data/servers:/crafty/servers
+        - ./crafty_data/config:/crafty/app/config
+        - ./crafty_data/import:/crafty/import
     networks:
       - minecraft_net
 
