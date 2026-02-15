@@ -1,0 +1,35 @@
+services:
+  crafty:
+    container_name: crafty_controller
+    image: arcadiatechnology/crafty-4:latest
+    restart: unless-stopped
+    ports:
+      - "8443:8443"   # Painel HTTPS
+      - "8123:8123"   # Dynmap/Bluemap (se usar)
+      - "25565:25565" # Porta padrão do Minecraft (necessária para LAN e Playit)
+    environment:
+      - TZ=America/Sao_Paulo
+    volumes:
+      - ./crafty_data:/crafty/app/config
+      - ./backups:/crafty/backups
+      - ./servers:/crafty/servers  # Onde ficam os arquivos do servidor
+    networks:
+      - minecraft_net
+
+  playit:
+    container_name: playit_agent
+    image: playit/agent
+    restart: unless-stopped
+    depends_on:
+      - crafty
+    volumes:
+      - ./playit_data:/config  # Salva a identidade do agente
+    network_mode: "host" # Recomendado para Playit detectar portas locais facilmente
+    # Se preferir não usar host mode, comente a linha acima, descomente 'networks' abaixo
+    # e configure o túnel no site da Playit para apontar para 'localhost:25565'
+    # networks:
+    #   - minecraft_net
+
+networks:
+  minecraft_net:
+    driver: bridge
