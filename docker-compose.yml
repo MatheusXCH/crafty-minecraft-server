@@ -18,6 +18,12 @@ services:
         - ./crafty_data/import:/crafty/import
     networks:
       - minecraft_net
+    deploy:
+      resources:
+        reservations:
+          memory: 1G
+        limits:
+          memory: 10G
 
   playit:
     container_name: playit_agent
@@ -30,6 +36,11 @@ services:
     volumes:
       - ./playit_data:/config
     network_mode: host
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
 
 networks:
   minecraft_net:
